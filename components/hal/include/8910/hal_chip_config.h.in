@@ -1,0 +1,183 @@
+/* Copyright (C) 2018 RDA Technologies Limited and/or its affiliates("RDA").
+ * All rights reserved.
+ *
+ * This software is supplied "AS IS" without any warranties.
+ * RDA assumes no responsibility or liability for the use of the software,
+ * conveys no license or title under any patent, copyright, or mask work
+ * right to the product. RDA reserves the right to make changes in the
+ * software without notification.  RDA also make no representation or
+ * warranty that such application will be suitable for the specified use
+ * without further testing or modification.
+ */
+
+#ifndef _HAL_CHIP_CONFIG_H_
+#define _HAL_CHIP_CONFIG_H_
+
+// @AUTO_GENERATION_NOTICE@
+
+/**
+ * system ROM load address
+ */
+#cmakedefine CONFIG_ROM_SRAM_LOAD_ADDRESS @CONFIG_ROM_SRAM_LOAD_ADDRESS@
+
+/**
+ * system ROM load maximum size
+ */
+#cmakedefine CONFIG_ROM_LOAD_SIZE @CONFIG_ROM_LOAD_SIZE@
+
+/**
+ * APP SRAM address
+ */
+#cmakedefine CONFIG_APP_SRAM_ADDRESS @CONFIG_APP_SRAM_ADDRESS@
+
+/**
+ * APP SRAM size
+ */
+#cmakedefine CONFIG_APP_SRAM_SIZE @CONFIG_APP_SRAM_SIZE@
+
+/**
+ * SRAM shared memory address
+ */
+#cmakedefine CONFIG_SRAM_SHMEM_ADDRESS @CONFIG_SRAM_SHMEM_ADDRESS@
+
+/**
+ * SRAM shared memory size
+ */
+#cmakedefine CONFIG_SRAM_SHMEM_SIZE @CONFIG_SRAM_SHMEM_SIZE@
+
+/**
+ * CP RAM address
+ */
+#cmakedefine CONFIG_CP_RAM_ADDRESS @CONFIG_CP_RAM_ADDRESS@
+
+/**
+ * CP RAM size
+ */
+#cmakedefine CONFIG_CP_RAM_SIZE @CONFIG_CP_RAM_SIZE@
+
+/**
+ * APP RAM address
+ */
+#cmakedefine CONFIG_APP_RAM_ADDRESS @CONFIG_APP_RAM_ADDRESS@
+
+/**
+ * APP RAM size
+ */
+#cmakedefine CONFIG_APP_RAM_SIZE @CONFIG_APP_RAM_SIZE@
+
+/**
+ * File APPIMG reserved RAM address
+ */
+#cmakedefine CONFIG_APP_FILEIMG_RAM_ADDRESS @CONFIG_APP_FILEIMG_RAM_ADDRESS@
+
+/**
+ * File APPIMG reserved RAM size
+ */
+#cmakedefine CONFIG_APP_FILEIMG_RAM_SIZE @CONFIG_APP_FILEIMG_RAM_SIZE@
+
+/**
+ * Flash APPIMG reserved RAM address
+ */
+#cmakedefine CONFIG_APP_FLASHIMG_RAM_ADDRESS @CONFIG_APP_FLASHIMG_RAM_ADDRESS@
+
+/**
+ * Flash APPIMG reserved RAM size
+ */
+#cmakedefine CONFIG_APP_FLASHIMG_RAM_SIZE @CONFIG_APP_FLASHIMG_RAM_SIZE@
+
+/**
+ * Trustzone reserved RAM address
+ */
+#cmakedefine CONFIG_APP_TRUSTZONE_RAM_ADDRESS @CONFIG_APP_TRUSTZONE_RAM_ADDRESS@
+
+/**
+ * Trustzone reserved RAM size
+ */
+#cmakedefine CONFIG_APP_TRUSTZONE_RAM_SIZE @CONFIG_APP_TRUSTZONE_RAM_SIZE@
+
+/**
+ * BT firmware reserved RAM address
+ */
+#cmakedefine CONFIG_APP_BTFW_RAM_ADDRESS @CONFIG_APP_BTFW_RAM_ADDRESS@
+
+/**
+ * BT firmware reserved RAM size
+ */
+#cmakedefine CONFIG_APP_BTFW_RAM_SIZE @CONFIG_APP_BTFW_RAM_SIZE@
+
+/**
+ * IRQ stack size
+ */
+#cmakedefine CONFIG_IRQ_STACK_SIZE @CONFIG_IRQ_STACK_SIZE@
+
+/**
+ * SVC stack size
+ */
+#cmakedefine CONFIG_SVC_STACK_SIZE @CONFIG_SVC_STACK_SIZE@
+
+/**
+ * mempll frequency
+ */
+#cmakedefine CONFIG_DEFAULT_MEMPLL_FREQ @CONFIG_DEFAULT_MEMPLL_FREQ@
+
+/**
+ * cpupll frequency
+ */
+#cmakedefine CONFIG_DEFAULT_CPUPLL_FREQ @CONFIG_DEFAULT_CPUPLL_FREQ@
+
+/**
+ * cpu frequency
+ */
+#cmakedefine CONFIG_DEFAULT_CPU_FREQ @CONFIG_DEFAULT_CPU_FREQ@
+
+/**
+ * default AXI bus frequency
+ */
+#cmakedefine CONFIG_DEFAULT_SYSAXI_FREQ @CONFIG_DEFAULT_SYSAXI_FREQ@
+
+/**
+ * maximum AXI bus frequency
+ */
+#cmakedefine CONFIG_MAX_SYSAXI_FREQ @CONFIG_MAX_SYSAXI_FREQ@
+
+/**
+ * AHB bus frequency
+ */
+#cmakedefine CONFIG_DEFAULT_SYSAHB_FREQ @CONFIG_DEFAULT_SYSAHB_FREQ@
+
+/**
+ * PSRAM or DDR frequency
+ */
+#cmakedefine CONFIG_DEFAULT_MEMBUS_FREQ @CONFIG_DEFAULT_MEMBUS_FREQ@
+
+/**
+ * flash device clock frequency
+ */
+#cmakedefine CONFIG_DEFAULT_SPIFLASH_DEV_FREQ @CONFIG_DEFAULT_SPIFLASH_DEV_FREQ@
+
+/**
+ * flash controller clock frequency
+ */
+#cmakedefine CONFIG_DEFAULT_SPIFLASH_CTRL_FREQ @CONFIG_DEFAULT_SPIFLASH_CTRL_FREQ@
+
+/**
+ * NOR flash interface frequency
+ */
+#cmakedefine CONFIG_DEFAULT_SPIFLASH_INTF_FREQ @CONFIG_DEFAULT_SPIFLASH_INTF_FREQ@
+
+/**
+ * force pull up for tst_h in iomux
+ */
+#cmakedefine CONFIG_TST_H_GROUND
+
+/**
+ * gpio number used in 32K sleep mode
+ */
+#cmakedefine CONFIG_SLEEP32K_GPIO @CONFIG_SLEEP32K_GPIO@
+
+/**
+ * support normal shutdown power off mode in pmic 2720 platform
+ */
+#cmakedefine CONFIG_SHUTDOWN_NORMAL_POWER_OFF
+
+#endif

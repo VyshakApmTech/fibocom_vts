@@ -1,0 +1,69 @@
+/* Copyright (C) 2018 RDA Technologies Limited and/or its affiliates("RDA").
+ * All rights reserved.
+ *
+ * This software is supplied "AS IS" without any warranties.
+ * RDA assumes no responsibility or liability for the use of the software,
+ * conveys no license or title under any patent, copyright, or mask work
+ * right to the product. RDA reserves the right to make changes in the
+ * software without notification.  RDA also make no representation or
+ * warranty that such application will be suitable for the specified use
+ * without further testing or modification.
+ */
+#ifndef _LIBLWM2M_CONFIG_H_
+#define _LIBLWM2M_CONFIG_H_
+
+// @AUTO_GENERATION_NOTICE@
+
+/**
+ * When enabled, CONFIG_LWM2M_REDUCE_MEMORY will be defined
+ * LWM2M can use less memery
+ */
+#cmakedefine CONFIG_LWM2M_REDUCE_MEMORY
+/**
+ * When enabled, CONFIG_LWM2M_FOTA_SUPPORT will be defined
+ * LWM2M can support FOTA package download and upgrade
+ */
+#cmakedefine CONFIG_LWM2M_FOTA_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_TLS_SUPPORT will be defined
+ * LWM2M can support lwm2ms
+ */
+#cmakedefine CONFIG_LWM2M_TLS_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_CTWING_SUPPORT will be defined
+ * LWM2M lib can support CTWING
+ */
+#cmakedefine CONFIG_LWM2M_CTWING_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_ONENET_SUPPORT will be defined
+ * LWM2M lib can support ONENET
+ */
+#cmakedefine CONFIG_LWM2M_ONENET_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_ONENET_DM_SUPPORT will be defined
+ * LWM2M lib can support ONENET DM
+ */
+#cmakedefine CONFIG_LWM2M_ONENET_DM_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_ONENET_UPDATE will be defined
+ * LWM2M lib can support ONENET FOTA package download and upgrade
+ */
+#cmakedefine CONFIG_LWM2M_ONENET_UPDATE
+/**
+ * When enabled, CONFIG_LWM2M_NOTIFY_SEQ_SUPPORT will be defined
+ */
+#cmakedefine CONFIG_LWM2M_NOTIFY_SEQ_SUPPORT
+/**
+ * When enabled, CONFIG_LWM2M_CTWING_NEW_STANDARD will be defined
+ */
+#cmakedefine CONFIG_LWM2M_CTWING_NEW_STANDARD
+/**
+ * When enabled, CONFIG_LWM2M_ONENET_SOTA will be defined
+ * lwm2m lib can download upgrade bin for MCU
+ */
+#cmakedefine CONFIG_LWM2M_ONENET_SOTA
+/**
+ * When enabled, CONFIG_LWM2M_OCEANCONNECT_CUS_SUPPORT will be defined
+ */
+#cmakedefine CONFIG_LWM2M_OCEANCONNECT_CUS_SUPPORT
+#endif

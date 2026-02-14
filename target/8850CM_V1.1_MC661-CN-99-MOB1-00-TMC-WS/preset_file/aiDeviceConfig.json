@@ -1,0 +1,96 @@
+{
+    "root": {
+        "network": {
+            "apn": "3gnet",
+            "username": "fibo",
+            "password": "ght",
+            "pdptype": 1,
+            "authtype": 0,
+            "netmode": 0
+        },
+        "bootstrap": {
+            "enable": 0,
+             "url": "http://iot-global-dev.cloud.fibocom.com",
+             "bootstrapkey": "",
+            "certpath": "/cert",
+            "info_expireTime": 0
+        },
+        "session_type": {
+            "protocol": 0,
+            "service_provider": 0,
+            "AIagent": 0
+        },
+        "auth": {
+            "enable": 1,
+            "url": "http://agent.fibocom.com/token",
+            "port": 443,
+            "certpath": "/cert"
+        },
+        "device_manage": {
+            "enable": 0,
+            "url": "",
+            "port": 443,
+            "certpath": "/cert"
+        },
+        "cloud": {
+            "url": "wss://ws.coze.cn/v1/chat?bot_id=",
+            "port": 443,
+            "certpath": "",
+            "heartbeat_interval": 30,
+            "greeting": {
+                "enabled": 0,
+                "file_path": "/welcome.wav"
+            }
+        },
+        "credentials": {
+            "botid": "",
+            "accessToken": "",
+            "expireTime": 0
+        },
+        "retry_policy": {
+            "time_interval": 60,
+            "max_attempts": 3
+        },
+        "providersParam": {
+            "sessionUpdate": {
+                "volc": {
+                    "instructions": "Your name is Dou Bao, and you are an intelligent assistant",
+                    "voice": "zh_female_tianmeixiaoyuan_moon_bigtts",
+                    "interrupt_msg": "{\"type\": \"response.cancel\"}"
+                },
+                "coze": {
+                    "voiceId": "",
+                    "interrupt_msg": "{\"id\": \"555555\",\"event_type\": \"conversation.chat.cancel\"}"
+                }
+            },
+            "audioAttr": {
+                "enable": 0,            
+                "coded": 0,
+                "inputAudio": {
+                    "format": 0,
+                    "codec": 0,
+                    "sampleRate": 16000,
+                    "record_mode": 0
+                },
+                "outputAudio": {
+                    "format": 0,
+                    "codec": 0,
+                    "interrupt_mode": "0",
+                    "pcmConfig": {
+                        "sampleRate": 16000
+                    },
+                    "opusConfig": {
+                        "bitRate": 48000,
+                        "useCbr": 0
+                    }
+                },
+                "pinAudio": {
+                    "record": "19,0,0",
+                    "volumeUp": "22,4,0",
+                    "volumeDown": "23,1,0",
+                    "interrupt": ""
+                }
+            }
+        }
+    }
+}

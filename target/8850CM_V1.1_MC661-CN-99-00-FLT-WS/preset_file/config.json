@@ -1,0 +1,48 @@
+{
+    "wifi": {
+        "enable": true,
+        "ssid": "folotoy",
+        "password": "12345678",
+        "config_type": 4
+    },
+    "common": {
+        "hardware_ver": "2.1.0",
+        "software_ver": "25.10.4.51",
+        "firmware_ver": "25.10.4.51",
+        "lamp_ver": "1.1", 
+        "log_level": 5,
+        "productkey": "folotoy", 
+        "devicekey": "", 
+        "firstboot": true, 
+        "role_count": 2, 
+        "role": 1, 
+        "old_role": 1, 
+        "etag": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+        },
+        "record_type": 2,
+        "timeout": 30,
+        "led_brightness": 3,
+        "volume": 100,
+        "volume_control_type": 1,
+        "pair_token": ""
+    },
+    "mqtt": {
+        "enable": true,
+        "broker": "f.folotoy.cn",
+        "port": 1883,
+        "cid": "fibocomTest",
+        "username": "fibocomTest",
+        "password": "fibocom1234"
+    },
+    "udpSpeechServer": {
+        "address": "f.folotoy.cn",
+        "port": 8085
+    }
+}

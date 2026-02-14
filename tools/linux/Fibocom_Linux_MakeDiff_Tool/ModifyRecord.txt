@@ -1,0 +1,45 @@
+===========================Fibocom_Linux_MakeDiff_Tool_V1.1.0.13修改点=========================
+1、修改提示信息打印，修改Fibocom_MC66x&MG66x&MC61x&MG61x &L61x&LC61x&LG61x_差分包制作指南_Linux_V1.5
+
+工具版本号修改为Fibocom_Linux_MakeDiff_Tool_V1.1.0.13
+
+===========================Fibocom_Linux_MakeDiff_Tool_V1.1.0.12修改点=========================
+1、app差分包包尾crc校验（在crc校验开启时有效，不开启时不影响）
+2、兼容新老命令输入（新版本工具的命令格式和旧版本，不影响客户旧版命令的使用）
+3、打开了签名日志打印，以及保留未签名的差分包，方便做完包之后对比
+
+工具版本号修改为Fibocom_Linux_MakeDiff_Tool_V1.1.0.12
+
+===========================Fibocom_Linux_MakeDiff_Tool_V1.1.0.11修改点=========================
+1、优化参数解析和边界判断
+2、添加app block size的自适应特殊功能
+3、添加bin/8910C3目录
+
+工具版本号修改为Fibocom_Linux_MakeDiff_Tool_V1.1.0.11
+
+===========================Fibocom_Linux_MakeDiff_Tool_V1.1.0.10修改点=========================
+对于 ./8850/setting/fota.xml 的修改：
+1、static_nv.bin.lz4更新方式由replace改为diff
+2、static_nv_2.bin.lz4更新方式由replace改为diff
+
+对于 ./8850BM-C1/setting/fota.xml 的修改：
+1、static_nv.bin.lz4更新方式由replace改为diff
+2、static_nv_2.bin.lz4更新方式由replace改为diff
+
+对于 ./8910/setting/fota.xml 的修改：
+1、所有replace改为diff
+2、audio_calib.bin更新方式由ignore改为diff
+3、static_nv.bin更新方式改为ignore
+
+对于 ./8910V1.6/setting/fota.xml 的修改：
+1、所有replace改为diff
+2、audio_calib.bin更新方式由ignore改为diff
+3、确保static_nv.bin.lz4为ignore（当前已经为ignore）
+
+对于 ./8910V1.6/setting/fota_CX.xml 的修改（fota_CX.xml即8910 C3）：
+1、所有replace改为diff
+2、audio_calib.bin更新方式由ignore改为diff
+3、确保static_nv.bin.lz4为ignore（当前已经为ignore）
+
+添加修改记录.txt
+工具版本号修改为Fibocom_Linux_MakeDiff_Tool_V1.1.0.10

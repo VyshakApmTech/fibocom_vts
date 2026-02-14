@@ -1,0 +1,11 @@
+
+///////////////////////////////////////////// Example /////////////////////////////////////////////
+#include "hal_config.h"
+#ifdef CONFIG_BLUEU_BT_ENABLE
+#include "bt_app_config.h"
+#endif
+#include "example_config.nv"
+#ifdef CONFIG_REDUCE_BLE_POWER
+#include "reduce_BLE_power_config.nv"
+#endif
+

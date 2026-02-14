@@ -1,0 +1,15 @@
+#!/bin/bash
+
+TARGET=$1
+TARGET_OUT=out/${TARGET}_debug
+source tools/launch.sh $TARGET
+if [[ $TARGET =~ '8910' ]]
+then
+tools/deliverpack.py load --keyword TARGET_OUT=$TARGET_OUT --inclusive 8910 prebuilts -- components/apploader/pack/core_filelist.xml list.json
+else
+tools/deliverpack.py load --keyword TARGET_OUT=$TARGET_OUT --inclusive 8850 prebuilts -- components/apploader/pack/core_filelist.xml list.json
+fi
+tools/deliverpack.py pack --output core_sdk.tar.gz list.json
+
+
+

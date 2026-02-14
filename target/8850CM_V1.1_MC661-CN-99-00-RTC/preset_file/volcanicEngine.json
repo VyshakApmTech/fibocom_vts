@@ -1,0 +1,38 @@
+{
+  "root": {
+    "network": {
+      "apn": "3gnet",
+      "pdptype": 1,
+      "username": "fibo",
+      "password": "ght",
+      "authtype": 0,
+      "netmode": 0
+    },
+    "VolcanicEngine": {
+      "cloudURL": "wss://ai-gateway.vei.volces.com/v1/realtime?model=AG-voice-chat-agent",
+      "cloudport": 443,
+      "certpath": "/cert",
+      "heatbeat": 30,
+      "keyval": "sk-9856454ecfd746ccb484f19625a5169cqbtdvx0zo7wadrqz",
+      "session_update": {
+        "modalities": "[\"text\", \"audio\"]",
+        "instructions": "Your name is Dou Bao, and you are an intelligent assistant.",
+        "voicetype": "zh_female_tianmeixiaoyuan_moon_bigtts",
+        "input_audio_format": "pcm16",
+        "output_audio_format": "pcm16",
+        "tool_choice": "auto",
+        "turn_detection": "None",
+        "temperature": 0.8
+      },
+      "audioAttr": {
+        "coded": "base64",
+        "sendFormat": "wav",
+        "sendSamplerate": 16000,
+        "sendPerchunk": 3200,
+        "sendDurationms": 10,
+        "recvFormat": "pcm",
+        "recvSamplerate": 16000
+      }
+    }
+  }
+}
