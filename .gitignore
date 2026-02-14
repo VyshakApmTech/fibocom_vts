@@ -1,0 +1,48 @@
+# top directories to ignore
+__pycache__
+_build
+build/
+# xml
+man
+/out/
+/.vscode/
+output/
+bin/
+
+# top files to ignore
+/tags
+/TAGS
+
+# hidden files
+# .*
+
+# cscope files
+cscope.*
+ncscope.*
+doxygen-warning-log.txt
+
+# editor backup files
+*.bak
+*.orig
+*~
+
+# object files and libraries
+*.o
+*.a
+*.so
+*.dylib
+*.lib
+*.exe
+*.dll
+*.elf
+*.img
+*.bin
+*.hex
+*.pac
+
+# misc
+\#*#
+
+# to include anyway
+!.gitignore
+compile_commands.json
