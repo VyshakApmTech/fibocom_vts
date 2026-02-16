@@ -27,7 +27,7 @@ void sim_process(void)
         case SIM_STATE_CHECKING:
             // Non-blocking SIM status check
             ret = fibo_get_sim_status_v2(&g_sim_status, 0);  // simId=0 for single SIM
-            
+            fibo_textTrace("SIM: SIM status check result: ret=%ld, status=%d", ret, g_sim_status);
             if (ret == 0 && g_sim_status == 1) {  // Success and SIM ready
                 fibo_textTrace("SIM: Ready");
                 g_sim_state = SIM_STATE_READY;

@@ -63,7 +63,6 @@ if(CONFIG_APPIMG_LOAD_FLASH)
     add_definitions(-DCONFIG_APPIMG_APP_DEMO)
     file(GLOB APP_DEMO_SOURCES_FILE ../components/apploader/pack/fibo_opencpu_demo/app_demo/*.c)
     endif()
-    
     if(CONFIG_APPIMG_APP_TEST)
         set(target testapi)
         add_appimg_flash_example(${target} src/app_ver.c)
@@ -72,6 +71,9 @@ if(CONFIG_APPIMG_LOAD_FLASH)
         set(target appimg_flash_Operator_Name)
         add_appimg_flash_example(${target} Project/main.c src/app_ver.c uartdebug/debug/src/uartdebug.c
         ${APP_DEMO_SOURCES_FILE})
+         # Add service module
+        target_include_directories(${target} PRIVATE Project/service/inc)
+        target_sources(${target} PRIVATE Project/service/sim.c)
     endif()
 
     target_include_targets(${target} PRIVATE
