@@ -3,54 +3,98 @@
 
 #include "fibo_opencpu.h"
 
-// GSM/GPRS state enumeration (matching Quectel pattern)
+// PDP state enumeration (internal use only)
 typedef enum {
-    GSM_STATE_SIM_NOT_DETECTED = 0,
-    GSM_STATE_SIM_DETECTED,
-    GSM_STATE_GPRS_INIT,
-    GSM_STATE_GPRS_ACTIVE,
-    GSM_STATE_ERROR
-} gsm_state_t;
-
-// PDP state enumeration
-typedef enum {
-    PDP_STATE_IDLE,
+    PDP_STATE_IDLE = 0,
     PDP_STATE_ACTIVATING,
     PDP_STATE_ACTIVE,
     PDP_STATE_FAILED
 } pdp_state_t;
 
-// Network information structure
-typedef struct {
-    char imsi[16];
-    char iccid[23];
-    char operator[30];
-    char apn[30];
-    uint8_t provider;  // 0=AIRTEL, 1=JIO, 2=BSNL, 3=VI
-    uint8_t signal_strength;
-    uint8_t is_registered;
-    uint8_t reg_deny_count;
-} network_info_t;
+// // Operator information structure (if not in fibo_opencpu.h)
+// typedef struct {
+//     uint16_t mcc;
+//     uint16_t mnc;
+//     // other fields as needed
+// } operator_info_t;
 
-// External variables
-extern gsm_state_t g_gsm_state;
-extern pdp_state_t g_pdp_state;
-extern network_info_t g_network;
-extern uint8_t g_apn[30];
+// Neighbour cell structure (matching Quectel)
+typedef struct
+{
+	int mnc;
+	int mcc;
+	char CellID[8];
+	char LAC[8];
+	char CellDB[8];
+} NeigbourCellTypedef;
+
+// GSM Structure (EXACT match to Quectel)
+typedef struct
+{
+	enum {SIM_NOT_DETECTED=0, SIM_DETECTED, GPRS_INIT, GPRS_ACTIVE} GSMState;
+	uint8_t SignalStrength;
+	uint16_t IsModemOK;
+	uint32_t ModemRespCount;
+	uint16_t MCC;
+	uint16_t MNC;
+	char LAC[6];
+	char CellID[8];
+	NeigbourCellTypedef NeigbourCell[4];
+	uint8_t IsTimeSet;
+	uint8_t IsNeighbourCells;
+	uint8_t IsRegDenied;  // Flag for registration denied state
+} GSM_Typedef;
+
+// Provider enum (matching Quectel)
+typedef enum {NONE, VI, BSNL, AIRTEL, JIO} Providertypedef;
+
+// Network Structure (matching Quectel)
+typedef struct 
+{
+	char IMEI[30];
+	char IMSI[30];
+	char Network[60];
+	char SIMNo[30];
+	char APN[50];
+	Providertypedef Provider;
+} NET_Typedef;
+
+// RTC Structure (matching Quectel)
+typedef struct _RTC
+{
+  uint16_t Year;
+  uint8_t Month;
+  uint8_t Date;
+  uint8_t DaysOfWeek;
+  uint8_t Hour;
+  uint8_t Min;
+  uint8_t Sec;
+} _RTC;
+
+// External variables (matching Quectel)
+extern GSM_Typedef GSM;
+extern NET_Typedef NetWork;
+extern _RTC CurrentDateTime;
+extern Providertypedef prfReq;
+extern uint8_t PrfChanged;
 
 // SIM service functions
 void sim_init(void);
-void sim_process(void);  
+void sim_process(void);
 BOOL sim_is_ready(void);
 
-// Subscriber information functions
-void read_subscriber_info(void);
-void check_network_registration(void);
-void get_apn_from_sim(void);
-void select_apn_by_operator(void);
-
 // GPRS functions
-void activate_gprs(void);
-void gprs_activation_callback(UINT8 cid, UINT8 sim_id);
+void GprsThreadEntry(void *param);
+void InitGPRSThread(int taskId);
+int CheckGPRSState(void);
+uint8_t GetNextValidProfile(uint8_t currentProfile);
+uint8_t SwitchProfile(uint8_t num);
+uint8_t SendAtCmd(char* str, char* resp, char* grep);
+uint8_t GetNeighbourCells(void);
+void GetImei(void);
+int SetupAutoTimesync(void);
+static void get_apn_from_sim(void);
+static void process_register(void);
+static void update_signal_strength(void);
 
 #endif

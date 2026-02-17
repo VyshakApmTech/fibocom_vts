@@ -22,4 +22,39 @@ echo Build complete!
 cd /d %~dp0
 
 echo Back to SDK folder: %cd%
+
+:: ============================================
+:: GIT CHECK SECTION (ADDED)
+:: ============================================
+
+echo.
+echo ---------- GIT CHECK ----------
+echo Current branch:
+git branch --show-current
+
+echo.
+echo Git status:
+git status
+
+echo.
+set /p confirmPush=Do you want to commit and push changes? (y/n): 
+
+if /I "%confirmPush%"=="y" (
+
+    set /p commitMsg=Enter commit message: 
+
+    git add .
+
+    git commit -m "%commitMsg%"
+
+    git push
+
+    echo.
+    echo Git push complete!
+
+) else (
+    echo.
+    echo Git push skipped.
+)
+
 pause
