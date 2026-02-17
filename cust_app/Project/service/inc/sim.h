@@ -40,7 +40,7 @@ extern uint8_t g_apn[30];
 
 // SIM service functions
 void sim_init(void);
-void sim_process(void);  // Now void, matches Quectel pattern
+void sim_process(void);  
 BOOL sim_is_ready(void);
 
 // Subscriber information functions
