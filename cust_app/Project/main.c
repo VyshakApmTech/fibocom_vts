@@ -4,6 +4,10 @@
 #include "sim.h"
 #include "gps.h"
 #include <string.h>
+#include "common/log.h"
+#include "sms.h"
+
+#define TAG "MAIN"
 
 char *app_ver = "VTS_0001";
 
@@ -11,14 +15,14 @@ char *app_ver = "VTS_0001";
 
 static void sig_res_callback(GAPP_SIGNAL_ID_T sig, va_list arg)
 {
-    fibo_textTrace("VTS: Signal callback sig = %d", sig);
+    LOGD(TAG, "Signal callback sig = %d", sig);
     
     switch (sig) {
         case GAPP_SIG_PDP_ACTIVE_IND:
         {
             UINT8 cid = va_arg(arg, int);
-            UINT8 sim_id = va_arg(arg, int);
-            fibo_textTrace("VTS: PDP ACTIVATED - CID=%d", cid);
+            va_arg(arg, int);  // sim_id - unused
+            LOGI(TAG, "PDP ACTIVATED - CID=%d", cid);
             // GSM.GSMState will be updated in activation polling
             break;
         }
@@ -26,8 +30,8 @@ static void sig_res_callback(GAPP_SIGNAL_ID_T sig, va_list arg)
         case GAPP_SIG_PDP_ACTIVE_OR_DEACTIVE_FAIL_IND:
         {
             UINT8 cid = va_arg(arg, int);
-            UINT8 sim_id = va_arg(arg, int);
-            fibo_textTrace("VTS: PDP FAILED - CID=%d", cid);
+            va_arg(arg, int);  // sim_id - unused
+            LOGE(TAG, "PDP FAILED - CID=%d", cid);
             break;
         }
         
@@ -38,7 +42,7 @@ static void sig_res_callback(GAPP_SIGNAL_ID_T sig, va_list arg)
 
 static void at_res_callback(UINT8 *buf, UINT16 len)
 {
-    fibo_textTrace("VTS AT Response: %s", buf);
+    LOGD(TAG, "AT Response: %s", buf);
 }
 
 static FIBO_CALLBACK_T user_callback = {
@@ -49,21 +53,38 @@ static FIBO_CALLBACK_T user_callback = {
 /* ===== USER APPLICATION THREAD ===== */
 void vts_main_thread(void *param)
 {
-    fibo_textTrace("VTS: Main thread started");
+    LOGI(TAG, "Main thread started");
     
-    // Initialize SIM/GPRS
-    sim_init();
+    sim_init();          // Initialize SIM
+    sms_init();          // Register SMS callback
     
-    // Start GPRS thread (just call the function directly)
-    GprsThreadEntry(param);
-    
-    // Never reaches here
+    while (1)
+    {
+        // GPRS state machine (one iteration)
+        GprsThreadEntry(param);
+        check_all_messages();
+        delete_read_messages();
+        // Check SMS flag
+        if (IsSMS)
+        {
+            LOGI(TAG, "SMS detected, processing...");
+            
+            // Read and process all unread messages
+            check_all_messages();
+            
+            
+            // IsSMS cleared inside check_unread_messages
+        }
+        
+        // Small sleep to prevent CPU hogging
+        fibo_taskSleep(10);
+    }
 }
 
 /* ===== APPLICATION ENTRY POINT ===== */
 void *appimg_enter(void *param)
 {
-    fibo_textTrace("VTS Boot");
+    LOGI(TAG, "Boot");
     
     fibo_thread_create(vts_main_thread, "vts_main", 10*1024, NULL, OSI_PRIORITY_NORMAL);
     // Create GPS thread

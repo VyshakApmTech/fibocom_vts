@@ -6,12 +6,16 @@
  * GNSS is enabled via fibo_gnss_enable(), NMEA data polled via fibo_gnss_nmea_get().
  */
 
-#include "gps.h"
+
 #include "fibo_opencpu.h"
+#include "../common/log.h"
+#include "gps.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+
+#define TAG "GPS"
 
 /* ============================================================
  *  Global Variables (declared extern in gps.h)
@@ -75,18 +79,18 @@ int gps_init(void)
     int ret;
     int retry = 0;
 
-    fibo_textTrace("GPS: Initializing GNSS");
+    LOGI(TAG, "Initializing GNSS");
 
     /* Configure satellite constellation: GPS + BDS + GALILEO (default=3) */
     ret = fibo_gnss_set_satellite(3);
     if (ret != 0) {
-        fibo_textTrace("GPS: Warning - set_satellite failed (%d)", ret);
+        LOGW(TAG, "set_satellite failed (%d)", ret);
     }
 
     /* Disable AGNSS (use standalone positioning by default) */
     ret = fibo_gnss_set_agnss_mode(0);
     if (ret != 0) {
-        fibo_textTrace("GPS: Warning - set_agnss_mode failed (%d)", ret);
+        LOGW(TAG, "set_agnss_mode failed (%d)", ret);
     }
 
     /* Configure NMEA sentences: enable GGA, RMC, GSA, GSV, VTG */
@@ -95,23 +99,23 @@ int gps_init(void)
     /* Set NMEA report frequency: 1 second */
     ret = fibo_gnss_nmea_freq_set(1);
     if (ret != 0) {
-        fibo_textTrace("GPS: Warning - nmea_freq_set failed (%d)", ret);
+        LOGW(TAG, "nmea_freq_set failed (%d)", ret);
     }
 
     /* Cold start GNSS */
     do {
         ret = fibo_gnss_enable(1);  /* 1 = cold start */
         if (ret == 0) {
-            fibo_textTrace("GPS: GNSS enabled (cold start)");
+            LOGI(TAG, "GNSS enabled (cold start)");
             GPS.State = 1;
             return 0;
         }
-        fibo_textTrace("GPS: gnss_enable failed, retry %d/%d", retry + 1, GNSS_ENABLE_RETRY);
+        LOGW(TAG, "gnss_enable failed, retry %d/%d", retry + 1, GNSS_ENABLE_RETRY);
         fibo_taskSleep(GNSS_ENABLE_RETRY_DELAY);
         retry++;
     } while (retry < GNSS_ENABLE_RETRY);
 
-    fibo_textTrace("GPS: GNSS init failed after %d retries", GNSS_ENABLE_RETRY);
+    LOGE(TAG, "GNSS init failed after %d retries", GNSS_ENABLE_RETRY);
     GPS.State = 0;
     return -1;
 }
@@ -122,13 +126,13 @@ int gps_init(void)
 
 void gps_thread_entry(void *param)
 {
-    fibo_textTrace("GPS: Thread started");
+    LOGI(TAG, "Thread started");
 
     /* Wait a moment for system to settle before touching GNSS */
     fibo_taskSleep(3000);
 
     if (gps_init() != 0) {
-        fibo_textTrace("GPS: Init failed, thread exiting");
+        LOGE(TAG, "Init failed, thread exiting");
         return;
     }
 
@@ -144,13 +148,13 @@ void gps_thread_entry(void *param)
 
         if (len > 0) {
             nmea_buf[len] = '\0';
-            fibo_textTrace("GPS NMEA[%d]: %.120s", len, (char *)nmea_buf);
+            LOGD(TAG, "NMEA[%d]: %.120s", len, (char *)nmea_buf);
             gnss_parse_nmea((char *)nmea_buf, len);
 
             /* Overspeed check after each position update */
             gps_overspeed_check();
         } else if (len == -1) {
-            fibo_textTrace("GPS: nmea_get error");
+            LOGE(TAG, "nmea_get error");
         }
         /* len == 0: no data yet, just keep polling */
 
@@ -452,8 +456,8 @@ void gps_overspeed_check(void)
     if (!GPS.GPSFix) return;
 
     if (GPS.Speed > GPS_OVERSPEED_THRESHOLD) {
-        fibo_textTrace("GPS: OVERSPEED! %.1f km/h > %.1f km/h threshold",
-                       GPS.Speed, GPS_OVERSPEED_THRESHOLD);
+        LOGW(TAG, "OVERSPEED! %.1f km/h > %.1f km/h threshold",
+                  GPS.Speed, GPS_OVERSPEED_THRESHOLD);
         /* TODO: trigger alarm, send alert SMS/GPRS */
     }
 }
@@ -466,12 +470,12 @@ void update_epo(void)
 {
     int ret;
 
-    fibo_textTrace("GPS: Enabling AGNSS for EPO update");
+    LOGI(TAG, "Enabling AGNSS for EPO update");
 
     /* Enable AGNSS */
     ret = fibo_gnss_set_agnss_mode(1);
     if (ret != 0) {
-        fibo_textTrace("GPS: AGNSS enable failed (%d)", ret);
+        LOGE(TAG, "AGNSS enable failed (%d)", ret);
         return;
     }
 
@@ -488,9 +492,9 @@ void update_epo(void)
                                      agnss_port,
                                      0);
     if (ret != 0) {
-        fibo_textTrace("GPS: AGNSS server set failed (%d)", ret);
+        LOGE(TAG, "AGNSS server set failed (%d)", ret);
     } else {
-        fibo_textTrace("GPS: AGNSS server configured");
+        LOGI(TAG, "AGNSS server configured");
     }
 }
 
@@ -503,7 +507,7 @@ void GPS_UartSendString(const char *str)
     if (!str) return;
     /* Forward raw string to trace output.
      * Replace with fibo_uart_write() if UART forwarding is required. */
-    fibo_textTrace("GPS_UART >> %s", str);
+    LOGD(TAG, "UART >> %s", str);
 }
 
 void SendNMEAToRS232(void)

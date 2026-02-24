@@ -93,8 +93,5 @@ uint8_t SendAtCmd(char* str, char* resp, char* grep);
 uint8_t GetNeighbourCells(void);
 void GetImei(void);
 int SetupAutoTimesync(void);
-static void get_apn_from_sim(void);
-static void process_register(void);
-static void update_signal_strength(void);
 
 #endif

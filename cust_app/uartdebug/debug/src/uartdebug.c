@@ -58,7 +58,7 @@ static void web_uart_recv_callback(hal_uart_port_t uart_port, UINT8 *data, UINT1
 {
 
      LOG_PRINTF("uartapi recv uart_port=%d len=%d, data=%s", uart_port, len, (char *)data);
-    fibo_hal_uart_put(WEBPORT, (char *)data,len);
+    fibo_hal_uart_put(WEBPORT, (UINT8 *)data,(UINT32)len);
 }
 int web_uart_send_data(char *buff, int len)
 {

@@ -1,6 +1,9 @@
 #include "sim.h"
 #include "osi_log.h"
+#include "../common/log.h"
 #include <string.h>
+
+#define TAG "SIM"
 
 // Global variables (EXACT match to Quectel)
 GSM_Typedef GSM = {0};
@@ -11,9 +14,7 @@ uint8_t PrfChanged = 0;
 
 // Internal variables
 static uint8_t g_sim_status = 0;
-static int g_check_count = 0;
 static uint8_t g_subscriber_info_read = 0;
-static pdp_state_t g_pdp_state = 0;  // Internal PDP state
 
 // Forward declarations
 static void process_register(void);
@@ -33,7 +34,7 @@ void sim_init(void)
     PrfChanged = 0;
     g_subscriber_info_read = 0;
     
-    fibo_textTrace("SIM: Service initialized");
+    LOGI(TAG, "Service initialized");
 }
 
 BOOL sim_is_ready(void)
@@ -51,7 +52,7 @@ static void get_apn_from_sim(void)
     uint8_t apn_len = 0;
     uint8_t apn[50] = {0};
     
-    fibo_textTrace("SIM: Reading APN from SIM card...");
+    LOGI(TAG, "Reading APN from SIM card...");
     
     int32_t result = fibo_nw_get_apn(0, nPdpType, &apn_len, apn);
     
@@ -59,11 +60,11 @@ static void get_apn_from_sim(void)
         // Copy to NetWork.APN
         memcpy(NetWork.APN, apn, apn_len);
         NetWork.APN[apn_len] = '\0';
-        fibo_textTrace("SIM: SIM APN found: %s", NetWork.APN);
+        LOGI(TAG, "SIM APN found: %s", NetWork.APN);
         GSM.GSMState = SIM_DETECTED;
         g_subscriber_info_read = 1;
     } else {
-        fibo_textTrace("SIM: No APN found on SIM (result=%ld)", result);
+        LOGE(TAG, "No APN found on SIM (result=%ld)", result);
         NetWork.APN[0] = '\0';  // Empty string
     }
 }
@@ -72,19 +73,19 @@ static void get_apn_from_sim(void)
  *============================================================================*/
 void GprsThreadEntry(void *param)
 {
-    fibo_textTrace("GPRS: Thread started");
+    LOGI(TAG, "GPRS: Thread started");
     
     // Initialize
     GetImei();
     
-    while(1)
-    {
+    // while(1)
+    // {
         switch (GSM.GSMState)
         {
             case SIM_NOT_DETECTED:
                 // Check SIM state
                 if (fibo_get_sim_status_v2(&g_sim_status, 0) == 0 && g_sim_status == 1) {
-                    fibo_textTrace("GPRS: SIM Detected");
+                    LOGI(TAG, "GPRS: SIM Detected");
                     //GSM.GSMState = SIM_DETECTED;
                     
                     // Read subscriber info
@@ -94,12 +95,12 @@ void GprsThreadEntry(void *param)
                         
                         if (fibo_get_imsi_by_simid_v2(imsi, 0) == 0) {
                             strcpy(NetWork.IMSI, (char*)imsi);
-                            fibo_textTrace("GPRS: IMSI: %s", NetWork.IMSI);
+                            LOGD(TAG, "GPRS: IMSI: %s", NetWork.IMSI);
                         }
                         
                         if (fibo_get_ccid(iccid, 0) == 0) {
                             strcpy(NetWork.SIMNo, (char*)iccid);
-                            fibo_textTrace("GPRS: ICCID: %s", NetWork.SIMNo);
+                            LOGD(TAG, "GPRS: ICCID: %s", NetWork.SIMNo);
                         }
                         get_apn_from_sim();
                         
@@ -130,7 +131,7 @@ void GprsThreadEntry(void *param)
                 PrfChanged = 1;
                 prfReq = NONE;
                 // Reset module after profile change
-                fibo_textTrace("GPRS: Profile changed, resetting...");
+                LOGD(TAG, "GPRS: Profile changed, resetting...");
                 // fibo_cfun_set(0, 0); // Reset if needed
             }
         }
@@ -140,7 +141,7 @@ void GprsThreadEntry(void *param)
             fibo_taskSleep(1000);
         else
             fibo_taskSleep(200);
-    }
+    // }
 }
 
 /*============================================================================
@@ -159,7 +160,7 @@ static void process_register(void)
     }
     
     // Store cell info (TAC and CellID)
-    snprintf(GSM.LAC, sizeof(GSM.LAC), "%d", reg_info.lte_scell_info.tac);
+    snprintf(GSM.LAC, sizeof(GSM.LAC), "%ld", (long)reg_info.lte_scell_info.tac);
     snprintf(GSM.CellID, sizeof(GSM.CellID), "%ld", reg_info.lte_scell_info.cell_id);
 
 
@@ -181,7 +182,7 @@ static void process_register(void)
             GSM.MCC = atoi(mcc_str);
             GSM.MNC = atoi(mnc_str);
             
-            fibo_textTrace("GPRS: Operator ID: %s, MCC=%d, MNC=%d", 
+            LOGD(TAG, "GPRS: Operator ID: %s, MCC=%d, MNC=%d", 
                           mcc_mnc_str, GSM.MCC, GSM.MNC);
         }
     }
@@ -227,11 +228,11 @@ static void process_register(void)
     if(strlen(NetWork.APN) == 0) {
         select_apn_by_operator();
     } else {
-        fibo_textTrace("GPRS: Using SIM APN: %s", NetWork.APN);
+        LOGD(TAG, "GPRS: Using SIM APN: %s", NetWork.APN);
     }
     
     GSM.GSMState = GPRS_INIT;
-    fibo_textTrace("GPRS: Network registered, moving to GPRS_INIT");
+    LOGI(TAG, "GPRS: Network registered, moving to GPRS_INIT");
 }
 
 /*============================================================================
@@ -282,7 +283,7 @@ static void select_apn_by_operator(void)
         NetWork.Provider = VI;
     }
     
-    fibo_textTrace("GPRS: Selected APN: %s for provider: %d", NetWork.APN, NetWork.Provider);
+    LOGD(TAG, "GPRS: Selected APN: %s for provider: %d", NetWork.APN, NetWork.Provider);
 }
 
 /*============================================================================
@@ -292,10 +293,8 @@ static void activate_gprs(void)
 {
     static uint8_t activation_attempts = 0;
     
-    fibo_textTrace("GPRS: Activating with APN: %s", NetWork.APN);
+    LOGI(TAG, "GPRS: Activating with APN: %s", NetWork.APN);
     
-    // Check if already registered
-    INT32 nw_stat = 0;
     // Using AT command or API to check GPRS state
     // For now, assume we need to activate
     
@@ -308,7 +307,7 @@ static void activate_gprs(void)
     
     if(ret == 0)
     {
-        fibo_textTrace("GPRS: Activation initiated");
+        LOGD(TAG, "GPRS: Activation initiated");
         
         // Wait for activation (timeout 60 seconds)
         int timeout = 60;
@@ -320,7 +319,7 @@ static void activate_gprs(void)
             if(fibo_pdp_status_get(1, ip_addr, &cid_status, 0) == 0 && cid_status == 1)
             {
                 GSM.GSMState = GPRS_ACTIVE;
-                fibo_textTrace("GPRS: Activated, IP: %s", ip_addr);
+                LOGI(TAG, "GPRS: Activated, IP: %s", ip_addr);
                 activation_attempts = 0;
                 return;
             }
@@ -335,7 +334,7 @@ static void activate_gprs(void)
     }
     
     activation_attempts++;
-    fibo_textTrace("GPRS: Activation failed (%d)", activation_attempts);
+    LOGE(TAG, "GPRS: Activation failed (%d)", activation_attempts);
 }
 
 /*============================================================================
@@ -343,8 +342,6 @@ static void activate_gprs(void)
  *============================================================================*/
 static void update_time(void)
 {
-    uint8_t julian_time = {0};
-    
     // Get RTC time (if available)
     // fibo_getRTC? Not sure of exact API
     
@@ -361,7 +358,7 @@ void GetImei(void)
     if(fibo_get_imei(imei, 0) == 0)
     {
         strcpy(NetWork.IMEI, (char*)imei);
-        fibo_textTrace("GPRS: IMEI: %s", NetWork.IMEI);
+        LOGD(TAG, "GPRS: IMEI: %s", NetWork.IMEI);
     }
 }
 
@@ -387,7 +384,7 @@ uint8_t GetNextValidProfile(uint8_t currentProfile)
  *============================================================================*/
 uint8_t SwitchProfile(uint8_t num)
 {
-    fibo_textTrace("GPRS: Switch to profile %d", num);
+    LOGI(TAG, "GPRS: Switch to profile %d", num);
     // STK implementation would go here
     return 1;
 }
@@ -425,5 +422,5 @@ int SetupAutoTimesync(void)
  *============================================================================*/
 void InitGPRSThread(int taskId)
 {
-    fibo_textTrace("GPRS: Thread initialized with ID: %lu", taskId);
+    LOGD(TAG, "GPRS: Thread initialized with ID: %lu", taskId);
 }
