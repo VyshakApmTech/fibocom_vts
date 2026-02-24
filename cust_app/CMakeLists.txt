@@ -76,6 +76,7 @@ if(CONFIG_APPIMG_LOAD_FLASH)
         target_sources(${target} PRIVATE Project/service/sim.c)
         target_sources(${target} PRIVATE Project/service/gps.c)
         target_sources(${target} PRIVATE Project/service/sms.c)
+        target_sources(${target} PRIVATE Project/service/tcp.c)
     endif()
 
     target_include_targets(${target} PRIVATE

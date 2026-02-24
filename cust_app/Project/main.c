@@ -6,6 +6,7 @@
 #include <string.h>
 #include "common/log.h"
 #include "sms.h"
+#include "tcp.h"
 
 #define TAG "MAIN"
 
@@ -89,6 +90,8 @@ void *appimg_enter(void *param)
     fibo_thread_create(vts_main_thread, "vts_main", 10*1024, NULL, OSI_PRIORITY_NORMAL);
     // Create GPS thread
     fibo_thread_create(gps_thread_entry, "gps_thread", 8*1024, NULL, OSI_PRIORITY_NORMAL);
+
+    fibo_thread_create(tcp_thread_entry, "tcp_thread", 8*1024, NULL, OSI_PRIORITY_NORMAL);
 
     return (void *)&user_callback;
 }

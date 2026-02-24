@@ -44,7 +44,6 @@ static void sms_rx_callback(uint32_t ind_flag, void *ind_msg_buf, uint32_t ind_m
         
         case 3: // FIBO_SMS_NEW_PDU_MSG_IND - New PDU message
         {
-            fibo_sms_pdu_msg_t *pdu_msg = (fibo_sms_pdu_msg_t*)ind_msg_buf;
             LOGI(TAG, "New PDU SMS received");
             IsSMS = 1;
             break;

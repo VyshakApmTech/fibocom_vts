@@ -29,6 +29,9 @@ extern char CMD_Buff[];
 
 void SendSOSSMS(uint8_t isFall);
 void SendSMS(char* ph,char* msg);
+void sms_init(void);
+void check_all_messages(void);
+void delete_read_messages(void);
 
 uint8_t DecodeSMS(char* msg,uint8_t IsServer);
 void MakeACTMessage(uint8_t mode, char* code);
