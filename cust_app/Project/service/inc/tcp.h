@@ -93,7 +93,7 @@ uint8_t TCPSocket_SendString(TCPSocketTypedef* socket, char* str);
 uint8_t TCPSocket_WaitAck(TCPSocketTypedef* socket, int sent_len);
 void TCP_CloseALLSockets(void);
 void TCPSocket_Process(TCPSocketTypedef* socket);
-
+static uint32_t TCPSocket_GetMsSinceBoot(void);
 
 
 #endif /* _TCP_H */
